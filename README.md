@@ -38,4 +38,3 @@ openssl req -newkey rsa:4096 \
 5. Select **Install phpipam Database**
 6. Select **Continue** and set *admin* password then **Save Settings**
 7. Proceed to login
-
