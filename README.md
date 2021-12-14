@@ -18,14 +18,14 @@ echo -n myPHPIPamDBPass >> DB_PASSWORD.txt
 mkdir certs
 
 openssl req -newkey rsa:4096 \
-            -x509 \
-            -sha256 \
-            -days 3650 \
-            -nodes \
-            -out certs/ipam.crt \
-            -keyout certs/ipam.crt.key \
-	        -subj "/CN=phpipam.lab.local" \
-            -addext "subjectAltName = DNS:phpipam.lab.local"
+-x509 \
+-sha256 \
+-days 3650 \
+-nodes \
+-out certs/ipam.crt \
+-keyout certs/ipam.crt.key \
+-subj "/CN=phpipam.lab.local" \
+-addext "subjectAltName = DNS:phpipam.lab.local"
 ```
 4. Run `docker-compose up -d`
 
