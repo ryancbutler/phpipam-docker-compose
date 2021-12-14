@@ -1,0 +1,76 @@
+version: '3'
+
+services:
+  phpipam-web:
+    image: phpipam/phpipam-www:latest
+    container_name: phpipam-www
+    environment:
+      - TZ=America/Chicago #Adjust timezone
+      - IPAM_DATABASE_HOST=phpipam-mariadb
+      - IPAM_DATABASE_PASS_FILE=/run/secrets/db_password
+      - IPAM_DATABASE_WEBHOST=%
+    restart: unless-stopped
+    volumes:
+      - phpipam-logo:/phpipam/css/images/logo
+    depends_on:
+      - phpipam-mariadb
+    networks:
+      - phpipam
+    ports:
+      - 8000:80
+    secrets:
+      - db_password
+
+  phpipam-cron:
+    image: phpipam/phpipam-cron:latest
+    container_name: phpipam-cron 
+    environment:
+      - TZ=America/Chicago #Adjust timezone
+      - IPAM_DATABASE_HOST=phpipam-mariadb
+      - IPAM_DATABASE_PASS_FILE=/run/secrets/db_password
+      - SCAN_INTERVAL=10m
+    restart: unless-stopped
+    depends_on:
+      - phpipam-mariadb
+    networks:
+      - phpipam
+    secrets:
+      - db_password
+
+  phpipam-mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/db_root_password
+    restart: unless-stopped
+    networks:
+      - phpipam
+    volumes:
+      - phpipam-db-data:/var/lib/mysql
+    secrets:
+      - db_root_password
+
+  gateway:
+    container_name: gateway
+    ports:
+      - 8443:443
+    image: haproxy:latest
+    restart: unless-stopped
+    volumes:
+      - $PWD/config:/usr/local/etc/haproxy:ro
+      - $PWD/certs:/etc/ssl/certs
+    networks:
+      - phpipam
+
+networks:
+  phpipam: null
+
+volumes:
+  phpipam-db-data: null
+  phpipam-logo: null
+
+secrets:
+  db_root_password:
+    file: ./MYSQL_ROOT_PASSWORD.txt
+  db_password:
+    file: ./DB_PASSWORD.txt

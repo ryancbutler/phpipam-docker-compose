@@ -1,0 +1,4 @@
+*.txt
+*.crt
+*.key
+.vscode
