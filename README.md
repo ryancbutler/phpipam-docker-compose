@@ -15,6 +15,7 @@ echo -n myPHPIPamDBPass >> DB_PASSWORD.txt
 ```
 3. Create self-signed Certs for SSL/TLS (Adjust accordingly)
 ```bash
+#create directory for certs
 mkdir certs
 
 openssl req -newkey rsa:4096 \
@@ -26,6 +27,9 @@ openssl req -newkey rsa:4096 \
 -keyout certs/ipam.crt.key \
 -subj "/CN=phpipam.lab.local" \
 -addext "subjectAltName = DNS:phpipam.lab.local"
+
+#Changes permissions on the cert files
+chmod 777 ./certs/ipam*
 ```
 4. Run `docker-compose up -d`
 
