@@ -23,7 +23,7 @@ services:
 
   phpipam-cron:
     image: phpipam/phpipam-cron:latest
-    container_name: phpipam-cron 
+    container_name: phpipam-cron
     environment:
       - TZ=America/Chicago #Adjust timezone
       - IPAM_DATABASE_HOST=phpipam-mariadb
@@ -53,7 +53,7 @@ services:
   gateway:
     container_name: gateway
     ports:
-      - 8443:443
+      - 8443:8443
     image: haproxy:latest
     restart: unless-stopped
     volumes:
